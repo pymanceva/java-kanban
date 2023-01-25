@@ -1,7 +1,7 @@
 package ru.yandex.taskTracker.model;
 
 public class Subtask extends Task {
-    int idOfEpic;
+    private int idOfEpic;
 
     public Subtask(String name, String description, String status, int idOfEpic) {
         super(name, description, status);

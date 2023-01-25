@@ -8,10 +8,10 @@ import ru.yandex.taskTracker.model.Subtask;
 import ru.yandex.taskTracker.model.Task;
 
 public class Manager {
-    Map<Integer, Task> tasks = new HashMap<>();
-    Map<Integer, Epic> epics = new HashMap<>();
-    Map<Integer, Subtask> subtasks = new HashMap<>();
-    int id = 0;
+    private Map<Integer, Task> tasks = new HashMap<>();
+    private Map<Integer, Epic> epics = new HashMap<>();
+    private Map<Integer, Subtask> subtasks = new HashMap<>();
+    private int id = 0;
     public final String NEW = "NEW";
     public final String IN_PROGRESS = "IN_PROGRESS";
     public final String DONE = "DONE";

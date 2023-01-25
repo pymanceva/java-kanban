@@ -6,6 +6,10 @@ import ru.yandex.taskTracker.service.Manager;
 
 public class Main {
     public static void main(String[] args) {
+        testCode();
+    }
+
+    static void testCode() {
         System.out.println("Поехали!");
         Manager manager = new Manager();
         Task task1 = new Task("Задача 1", "Описание задачи 1", "NEW");
@@ -47,4 +51,5 @@ public class Main {
         System.out.println(manager.getSubtasks());
     }
 }
+
 
