@@ -33,15 +33,16 @@ public class Main {
         manager.getTaskByID(1);
         System.out.println(historyManager.getHistory());
         manager.getTaskByID(2);
-        System.out.println(historyManager.getHistory());
+        manager.getTaskByID(2);
+        manager.getTaskByID(2);
+        manager.getTaskByID(2);
         manager.getEpicByID(3);
-        System.out.println(historyManager.getHistory());
         manager.getSubtaskByID(4);
-        System.out.println(historyManager.getHistory());
         manager.getSubtaskByID(5);
-        System.out.println(historyManager.getHistory());
         manager.getEpicByID(6);
-        System.out.println(historyManager.getHistory());
+        manager.getTaskByID(2);
+        manager.getTaskByID(2);
+        manager.getTaskByID(2);
         manager.getSubtaskByID(7);
         System.out.println(historyManager.getHistory());
     }
