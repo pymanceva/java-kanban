@@ -1,10 +1,10 @@
 package ru.yandex.taskTracker.service;
 
 import ru.yandex.taskTracker.model.Task;
-
-import java.util.List;
+import java.util.ArrayList;
 
 public interface HistoryManager {
     void addTask(Task task);
-    List<Task> getHistory();
+    void removeTask(int id);
+    ArrayList<Task> getTasks();
 }

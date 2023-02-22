@@ -22,7 +22,7 @@ public class Main {
         Subtask subtask1 = new Subtask("Подтаск 4", "Описание подтаска 4", NEW, 3);
         Subtask subtask2 = new Subtask("Подтаск 5", "Описание подтаска 5", NEW, 3);
         Epic epic2 = new Epic("Эпик 6", "Описание задачи 6", NEW);
-        Subtask subtask3 = new Subtask("Подтаск 7", "Описание подтаска 7", NEW, 6);
+        Subtask subtask3 = new Subtask("Подтаск 7", "Описание подтаска 7", NEW, 3);
         manager.addTask(task1);
         manager.addTask(task2);
         manager.addEpic(epic1);
@@ -30,21 +30,22 @@ public class Main {
         manager.addSubtask(subtask2);
         manager.addEpic(epic2);
         manager.addSubtask(subtask3);
+
         manager.getTaskByID(1);
-        System.out.println(historyManager.getHistory());
-        manager.getTaskByID(2);
-        manager.getTaskByID(2);
-        manager.getTaskByID(2);
-        manager.getTaskByID(2);
-        manager.getEpicByID(3);
         manager.getSubtaskByID(4);
-        manager.getSubtaskByID(5);
-        manager.getEpicByID(6);
-        manager.getTaskByID(2);
-        manager.getTaskByID(2);
+        manager.getEpicByID(3);
         manager.getTaskByID(2);
         manager.getSubtaskByID(7);
-        System.out.println(historyManager.getHistory());
+        manager.getSubtaskByID(5);
+        manager.getTaskByID(2);
+        manager.getSubtaskByID(7);
+        System.out.println(historyManager.getTasks());
+
+        manager.deleteTaskByID(1);
+        System.out.println(historyManager.getTasks());
+
+        manager.deleteEpicByID(3);
+        System.out.println(historyManager.getTasks());
     }
 }
 

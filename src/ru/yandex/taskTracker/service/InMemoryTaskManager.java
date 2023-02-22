@@ -41,6 +41,7 @@ public class InMemoryTaskManager implements TaskManager{
         epic.setSubtasksOfEpic(subtaskOfEpic);
         checkStatusOfEpic(epic);
     }
+
     @Override
     public List<Integer> getListOfSubtasksOfEpic(int id) {
         return epics.get(id).getSubtasksOfEpic();
@@ -49,6 +50,9 @@ public class InMemoryTaskManager implements TaskManager{
     @Override
     public void deleteAllTasks() {
         if (!tasks.isEmpty()) {
+            for (Integer id : tasks.keySet()) {
+                inMemoryHistoryManager.removeTask(id);
+            }
             tasks.clear();
         }
     }
@@ -56,6 +60,9 @@ public class InMemoryTaskManager implements TaskManager{
     @Override
     public void deleteAllEpics() {
         if (!epics.isEmpty()) {
+            for (Integer id : epics.keySet()) {
+                inMemoryHistoryManager.removeTask(id);
+            }
             epics.clear();
             deleteAllSubtasks();
         }
@@ -64,6 +71,9 @@ public class InMemoryTaskManager implements TaskManager{
     @Override
     public void deleteAllSubtasks() {
         if (!subtasks.isEmpty()) {
+            for (Integer id : subtasks.keySet()) {
+                inMemoryHistoryManager.removeTask(id);
+            }
             subtasks.clear();
             for (Epic epic : epics.values()) {
                 checkStatusOfEpic(epic);
@@ -156,6 +166,7 @@ public class InMemoryTaskManager implements TaskManager{
 
     @Override
     public void deleteTaskByID(int id) {
+        inMemoryHistoryManager.removeTask(id);
         tasks.remove(id);
     }
 
@@ -163,14 +174,17 @@ public class InMemoryTaskManager implements TaskManager{
     public void deleteEpicByID(int id) {
         List<Integer> subtasksOfEpic = epics.get(id).getSubtasksOfEpic();
         for (Integer idSubtask : subtasksOfEpic) {
+            inMemoryHistoryManager.removeTask(idSubtask);
             subtasks.remove(idSubtask);
         }
+        inMemoryHistoryManager.removeTask(id);
         epics.remove(id);
     }
 
     @Override
     public void deleteSubtaskByID(int id) {
         Subtask subtask = subtasks.get(id);
+        inMemoryHistoryManager.removeTask(id);
         subtasks.remove(id);
         checkStatusOfEpic(getEpicByID(subtask.getIdOfEpic()));
     }
