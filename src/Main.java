@@ -39,6 +39,8 @@ public class Main {
         manager.getSubtaskByID(5);
         manager.getTaskByID(2);
         manager.getSubtaskByID(7);
+        manager.getTaskByID(88);
+
         System.out.println(historyManager.getTasks());
 
         manager.deleteTaskByID(1);

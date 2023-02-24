@@ -9,19 +9,21 @@ public class InMemoryHistoryManager implements HistoryManager {
 
     @Override
     public void addTask(Task task) {
-        if (historyMap.containsKey(task.getId())) {
-            Node<Task> newNode = historyMap.get(task.getId());
-            history.removeNode(newNode);
-            history.linkLast(task);
-            historyMap.put(task.getId(), newNode);
-        } else {
-            Node<Task> newNode = history.linkLast(task);
-            historyMap.put(task.getId(), newNode);
+        if (task != null) {
+            if (historyMap.containsKey(task.getId())) {
+                Node<Task> newNode = historyMap.get(task.getId());
+                history.removeNode(newNode);
+                history.linkLast(task);
+                historyMap.put(task.getId(), newNode);
+            } else {
+                Node<Task> newNode = history.linkLast(task);
+                historyMap.put(task.getId(), newNode);
+            }
         }
     }
 
     @Override
-    public ArrayList<Task> getTasks() {
+    public List<Task> getTasks() {
         return history.tasksList();
     }
 
@@ -38,43 +40,47 @@ public class InMemoryHistoryManager implements HistoryManager {
         private static int size = 0;
 
         public Node<E> linkLast(E task) {
-            final Node<E> oldTail = tail;
-            final Node<E> newNode = new Node<>(oldTail, task, null);
-            tail = newNode;
-            if (oldTail == null)
-                head = newNode;
-            else
-                oldTail.next = newNode;
-            size++;
+            Node<E> oldTail = tail;
+            Node<E> newNode = new Node<>(oldTail, task, null);
+            if (task != null) {
+                tail = newNode;
+                if (oldTail == null)
+                    head = newNode;
+                else
+                    oldTail.next = newNode;
+                size++;
+            } else {
+                newNode = tail;
+            }
             return newNode;
         }
 
-        public E removeNode(Node<E> x) {
-            final E element = x.data;
-            final Node<E> next = x.next;
-            final Node<E> prev = x.prev;
+        public void removeNode(Node<E> x) {
+            if (x != null) {
+                final Node<E> next = x.next;
+                final Node<E> prev = x.prev;
 
-            if (prev == null) {
-                head = next;
-            } else {
-                prev.next = next;
-                x.prev = null;
+                if (prev == null) {
+                    head = next;
+                } else {
+                    prev.next = next;
+                    x.prev = null;
+                }
+
+                if (next == null) {
+                    tail = prev;
+                } else {
+                    next.prev = prev;
+                    x.next = null;
+                }
+
+                x.data = null;
+                CustomLinkedList.size--;
             }
-
-            if (next == null) {
-                tail = prev;
-            } else {
-                next.prev = prev;
-                x.next = null;
-            }
-
-            x.data = null;
-            CustomLinkedList.size--;
-            return element;
         }
 
-        public ArrayList<E> tasksList () {
-            ArrayList<E> result = new ArrayList<>();
+        public List<E> tasksList () {
+            List<E> result = new ArrayList<>();
             for (Node<E> x = head; x != null; x = x.next) {
                 result.add(x.data);
             }

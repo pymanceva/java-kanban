@@ -17,29 +17,35 @@ public class InMemoryTaskManager implements TaskManager{
 
     @Override
     public void addTask(Task task) {
-        ++id;
-        task.setId(id);
-        tasks.put(id, task);
+        if (task != null) {
+            ++id;
+            task.setId(id);
+            tasks.put(id, task);
+        }
     }
 
     @Override
     public void addEpic(Epic epic) {
-        ++id;
-        epic.setId(id);
-        epics.put(id, epic);
+        if (epic != null) {
+            ++id;
+            epic.setId(id);
+            epics.put(id, epic);
+        }
     }
 
     @Override
     public void addSubtask(Subtask subtask) {
-        ++id;
-        subtask.setId(id);
-        subtasks.put(id, subtask);
-        int idOfEpic = subtask.getIdOfEpic();
-        Epic epic = epics.get(idOfEpic);
-        List<Integer> subtaskOfEpic = epic.getSubtasksOfEpic();
-        subtaskOfEpic.add(subtask.getId());
-        epic.setSubtasksOfEpic(subtaskOfEpic);
-        checkStatusOfEpic(epic);
+        if (subtask != null) {
+            ++id;
+            subtask.setId(id);
+            subtasks.put(id, subtask);
+            int idOfEpic = subtask.getIdOfEpic();
+            Epic epic = epics.get(idOfEpic);
+            List<Integer> subtaskOfEpic = epic.getSubtasksOfEpic();
+            subtaskOfEpic.add(subtask.getId());
+            epic.setSubtasksOfEpic(subtaskOfEpic);
+            checkStatusOfEpic(epic);
+        }
     }
 
     @Override
@@ -83,63 +89,85 @@ public class InMemoryTaskManager implements TaskManager{
 
     @Override
     public void updateTask(Task task, int id) {
-        task.setId(id);
-        tasks.put(id, task);
+        if (tasks.containsKey(id)) {
+            task.setId(id);
+            tasks.put(id, task);
+        } else {
+            addTask(task);
+        }
     }
 
     @Override
     public void updateEpic(Epic epic, int id) {
-        List<Integer> subtaskList = epics.get(id).getSubtasksOfEpic();
-        epic.setId(id);
-        epics.put(id, epic);
-        epic.setSubtasksOfEpic(subtaskList);
-        checkStatusOfEpic(epic);
+        if (epic != null) {
+            if (epics.containsKey(id)) {
+                List<Integer> subtaskList = epics.get(id).getSubtasksOfEpic();
+                epic.setId(id);
+                epics.put(id, epic);
+                epic.setSubtasksOfEpic(subtaskList);
+                checkStatusOfEpic(epic);
+            } else {
+                addEpic(epic);
+            }
+        }
     }
 
     @Override
     public void updateSubtask(Subtask subtask, int id) {
-        subtask.setId(id);
-        subtasks.put(id, subtask);
-        checkStatusOfEpic(epics.get(subtask.getIdOfEpic()));
+        if (subtask != null) {
+            if (subtasks.containsKey(id)) {
+                subtask.setId(id);
+                subtasks.put(id, subtask);
+                checkStatusOfEpic(epics.get(subtask.getIdOfEpic()));
+            } else {
+                addSubtask(subtask);
+            }
+        }
     }
 
     @Override
     public void changeStatusOfTask(Task task, Status status) {
-        task.setStatus(status);
+        if (task != null) {
+            task.setStatus(status);
+        }
     }
 
     @Override
     public void changeStatusOfSubtask(Subtask subtask, Status status) {
-        subtask.setStatus(status);
-        Epic epic = epics.get(subtask.getIdOfEpic());
-        checkStatusOfEpic(epic);
+        if (subtask != null) {
+            subtask.setStatus(status);
+            Epic epic = epics.get(subtask.getIdOfEpic());
+            checkStatusOfEpic(epic);
+        }
     }
 
     @Override
     public void checkStatusOfEpic(Epic epic) {
-        List<Integer> subtaskList = epic.getSubtasksOfEpic();
-        int newSubtask = 0;
-        int inProgressSubtask = 0;
-        int doneSubtask = 0;
-        for (Integer idOfSubtask : subtaskList) {
-            Subtask subtask = subtasks.get(idOfSubtask);
-            switch (subtask.getStatus()) {
-                case NEW:
-                    ++newSubtask;
-                    break;
-                case IN_PROGRESS:
-                    ++inProgressSubtask;
-                    break;
-                case DONE:
-                    ++doneSubtask;
+        if (epic != null) {
+            List<Integer> subtaskList = epic.getSubtasksOfEpic();
+            int newSubtask = 0;
+            int inProgressSubtask = 0;
+            int doneSubtask = 0;
+            for (Integer idOfSubtask : subtaskList) {
+                Subtask subtask = subtasks.get(idOfSubtask);
+                switch (subtask.getStatus()) {
+                    case NEW:
+                        ++newSubtask;
+                        break;
+                    case IN_PROGRESS:
+                        ++inProgressSubtask;
+                        break;
+                    case DONE:
+                        ++doneSubtask;
+                }
             }
-        }
-        if (inProgressSubtask == 0 && doneSubtask == 0) {
-            epic.setStatus(NEW);
-        } else if (!subtaskList.isEmpty() && newSubtask == 0 && inProgressSubtask == 0) {
-            epic.setStatus(DONE);
-        } else {
-            epic.setStatus(IN_PROGRESS);
+            if (inProgressSubtask == 0 && doneSubtask == 0) {
+                epic.setStatus(NEW);
+            } else if (!subtaskList.isEmpty() && newSubtask == 0 && inProgressSubtask == 0) {
+                epic.setStatus(DONE);
+            } else {
+                epic.setStatus(IN_PROGRESS);
+            }
         }
     }
 
