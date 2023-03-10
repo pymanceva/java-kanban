@@ -1,4 +1,4 @@
-package ru.yandex.taskTracker.service;
+package ru.yandex.taskTracker.takManager;
 
 public class Managers {
     public static TaskManager getDefault() {

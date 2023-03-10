@@ -1,6 +1,8 @@
-package ru.yandex.taskTracker.service;
+package ru.yandex.taskTracker.historyManager;
 
 import ru.yandex.taskTracker.model.Task;
+import ru.yandex.taskTracker.util.Node;
+
 import java.util.*;
 
 public class InMemoryHistoryManager implements HistoryManager {
@@ -31,6 +33,15 @@ public class InMemoryHistoryManager implements HistoryManager {
     public void removeTask(int id) {
         history.removeNode(historyMap.get(id));
         historyMap.remove(id);
+    }
+
+    @Override
+    public String toString() {
+        String str = "";
+        for (Integer id :historyMap.keySet()) {
+            str = str + id + ",";
+        }
+        return str;
     }
 }
 

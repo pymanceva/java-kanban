@@ -1,6 +1,7 @@
 package ru.yandex.taskTracker.model;
 
-import ru.yandex.taskTracker.service.Status;
+import ru.yandex.taskTracker.util.Status;
+import ru.yandex.taskTracker.util.TaskType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,8 +9,8 @@ import java.util.List;
 public class Epic extends Task {
     private List<Integer> subtasksOfEpic = new ArrayList<>();
 
-    public Epic(String name, String description, Status status) {
-        super(name, description, status);
+    public Epic(String name, String description, Status status, TaskType type) {
+        super(name, description, status, type);
     }
 
     public List<Integer> getSubtasksOfEpic() {
@@ -22,12 +23,6 @@ public class Epic extends Task {
 
     @Override
     public String toString() {
-        return "Epic{" +
-                "id=" + getId() +
-                ", name='" + getName() + '\'' +
-                ", description='" + getDescription() + '\'' +
-                ", status='" + getStatus() + '\'' +
-                ", subtasksOfEpic=" + subtasksOfEpic +
-                '}';
+        return getId() + "," + getType() + "," + getName() + "," + getStatus() + "," + getDescription() + ",";
     }
 }

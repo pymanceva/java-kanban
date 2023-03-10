@@ -1,6 +1,7 @@
 package ru.yandex.taskTracker.model;
 
-import ru.yandex.taskTracker.service.Status;
+import ru.yandex.taskTracker.util.Status;
+import ru.yandex.taskTracker.util.TaskType;
 
 import java.util.Objects;
 
@@ -9,11 +10,13 @@ public class Task {
     private String name;
     private String description;
     private Status status;
+    private final TaskType type;
 
-    public Task(String name, String description, Status status) {
+    public Task(String name, String description, Status status, TaskType type) {
         this.name = name;
         this.description = description;
         this.status = status;
+        this.type = type;
     }
 
     public void setId(int id) {
@@ -48,6 +51,8 @@ public class Task {
         this.status = status;
     }
 
+    public TaskType getType() { return type; }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -63,12 +68,7 @@ public class Task {
 
     @Override
     public String toString() {
-        return "Task{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", description='" + description + '\'' +
-                ", status='" + status + '\'' +
-                '}';
+        return id + "," + type + "," + name + "," + status + "," + description + ",";
     }
 }
 

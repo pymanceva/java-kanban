@@ -1,4 +1,4 @@
-package ru.yandex.taskTracker.service;
+package ru.yandex.taskTracker.historyManager;
 
 import ru.yandex.taskTracker.model.Task;
 import java.util.List;

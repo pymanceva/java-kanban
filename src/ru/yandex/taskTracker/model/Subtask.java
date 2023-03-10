@@ -1,12 +1,13 @@
 package ru.yandex.taskTracker.model;
 
-import ru.yandex.taskTracker.service.Status;
+import ru.yandex.taskTracker.util.Status;
+import ru.yandex.taskTracker.util.TaskType;
 
 public class Subtask extends Task {
-    private int idOfEpic;
+    private final int idOfEpic;
 
-    public Subtask(String name, String description, Status status, int idOfEpic) {
-        super(name, description, status);
+    public Subtask(String name, String description, Status status, int idOfEpic, TaskType type) {
+        super(name, description, status, type);
         this.idOfEpic = idOfEpic;
     }
 
@@ -16,12 +17,7 @@ public class Subtask extends Task {
 
     @Override
     public String toString() {
-        return "Subtask{" +
-                "id=" + getId() +
-                ", name='" + getName() + '\'' +
-                ", description='" + getDescription() + '\'' +
-                ", status='" + getStatus() + '\'' +
-                ", idOfEpic=" + idOfEpic +
-                '}';
+        return getId() + "," + getType() + "," + getName() + "," + getStatus() + "," + getDescription() + "," +
+                idOfEpic;
     }
 }

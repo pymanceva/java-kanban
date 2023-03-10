@@ -1,8 +1,9 @@
-package ru.yandex.taskTracker.service;
+package ru.yandex.taskTracker.takManager;
 
 import ru.yandex.taskTracker.model.Epic;
 import ru.yandex.taskTracker.model.Subtask;
 import ru.yandex.taskTracker.model.Task;
+import ru.yandex.taskTracker.util.Status;
 
 import java.util.List;
 import java.util.Map;

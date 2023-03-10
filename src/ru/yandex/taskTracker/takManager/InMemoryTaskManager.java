@@ -1,19 +1,21 @@
-package ru.yandex.taskTracker.service;
+package ru.yandex.taskTracker.takManager;
 
 import java.util.*;
 
+import ru.yandex.taskTracker.historyManager.InMemoryHistoryManager;
 import ru.yandex.taskTracker.model.Epic;
 import ru.yandex.taskTracker.model.Subtask;
 import ru.yandex.taskTracker.model.Task;
+import ru.yandex.taskTracker.util.Status;
 
-import static ru.yandex.taskTracker.service.Status.*;
+import static ru.yandex.taskTracker.util.Status.*;
 
-public class InMemoryTaskManager implements TaskManager{
+public class InMemoryTaskManager implements TaskManager {
     private final Map<Integer, Task> tasks = new HashMap<>();
     private final Map<Integer, Epic> epics = new HashMap<>();
     private final Map<Integer, Subtask> subtasks = new HashMap<>();
     private int id = 0;
-    private final InMemoryHistoryManager inMemoryHistoryManager = new InMemoryHistoryManager();
+    public final InMemoryHistoryManager inMemoryHistoryManager = new InMemoryHistoryManager();
 
     @Override
     public void addTask(Task task) {
@@ -41,7 +43,12 @@ public class InMemoryTaskManager implements TaskManager{
             subtasks.put(id, subtask);
             int idOfEpic = subtask.getIdOfEpic();
             Epic epic = epics.get(idOfEpic);
-            List<Integer> subtaskOfEpic = epic.getSubtasksOfEpic();
+            List<Integer> subtaskOfEpic;
+            if (epic.getSubtasksOfEpic() == null) {
+                subtaskOfEpic = new ArrayList<>();
+            } else {
+                subtaskOfEpic = epic.getSubtasksOfEpic();
+            }
             subtaskOfEpic.add(subtask.getId());
             epic.setSubtasksOfEpic(subtaskOfEpic);
             checkStatusOfEpic(epic);

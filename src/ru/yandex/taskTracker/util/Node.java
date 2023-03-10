@@ -1,9 +1,9 @@
-package ru.yandex.taskTracker.service;
+package ru.yandex.taskTracker.util;
 
 public class Node<E> {
-    protected E data;
-    protected Node<E> next;
-    protected Node<E> prev;
+    public E data;
+    public Node<E> next;
+    public Node<E> prev;
 
     public Node(Node<E> prev, E data, Node<E> next) {
         this.data = data;
