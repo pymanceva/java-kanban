@@ -18,21 +18,25 @@ import java.util.Map;
 
 public class FileBackedTasksManager extends InMemoryTaskManager implements TaskManager {
     private final File kanban;
-    public static final String path = "src\\resources\\kanban.csv";
+    public static final String PATH = "src\\resources\\kanban.csv";
 
     public FileBackedTasksManager(File kanban) {
         super();
         this.kanban = kanban;
     }
 
-    void save() {
+    void checkFile() {
         try {
             if (!kanban.exists()) {
-                Files.createFile(Path.of(path));
+                Files.createFile(Path.of(PATH));
             }
         } catch (IOException e) {
             throw new TaskManagerException("Не удалось создать файл");
         }
+    }
+
+    void save() {
+        checkFile();
         try (PrintWriter writer = new PrintWriter(new FileWriter(kanban, StandardCharsets.UTF_8))) {
             writer.println("id,type,name,status,description,epic");
             for (Task task : super.getTasks().values()) {
@@ -47,7 +51,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager implements TaskM
 
             writer.println("\r\n" + historyToString(super.inMemoryHistoryManager));
         } catch (IOException e) {
-            System.out.println("Произошла ошибка при записи данных в файл");
+            throw new TaskManagerException("Произошла ошибка при записи данных в файл");
         }
     }
 
@@ -233,7 +237,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager implements TaskM
     public static FileBackedTasksManager loadFromFile(File file) {
         FileBackedTasksManager loadedManager = new FileBackedTasksManager(file);
         try {
-            String content = Files.readString(Path.of(path));
+            String content = Files.readString(Path.of(PATH));
             String[] lines = content.split("\r?\n");
             for (int i = 1; i < lines.length - 2; i++) {
                 String line = lines[i];
