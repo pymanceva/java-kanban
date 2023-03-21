@@ -3,6 +3,7 @@ package ru.yandex.taskTracker.model;
 import ru.yandex.taskTracker.util.Status;
 import ru.yandex.taskTracker.util.TaskType;
 
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class Task {
@@ -11,12 +12,17 @@ public class Task {
     private String description;
     private Status status;
     private final TaskType type;
+    private int duration;
+    private LocalDateTime startTime;
 
-    public Task(String name, String description, Status status, TaskType type) {
+
+    public Task(String name, String description, Status status, TaskType type, int duration, LocalDateTime startTime) {
         this.name = name;
         this.description = description;
         this.status = status;
         this.type = type;
+        this.duration = duration;
+        this.startTime = startTime;
     }
 
     public void setId(int id) {
@@ -53,6 +59,26 @@ public class Task {
 
     public TaskType getType() { return type; }
 
+    public int getDuration() {
+        return duration;
+    }
+
+    public LocalDateTime getStartTime() {
+        return startTime;
+    }
+
+    public LocalDateTime getEndTime() {
+        return startTime.plusMinutes(duration);
+    }
+
+    public void setDuration(int duration) {
+        this.duration = duration;
+    }
+
+    public void setStartTime(LocalDateTime startTime) {
+        this.startTime = startTime;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -68,7 +94,8 @@ public class Task {
 
     @Override
     public String toString() {
-        return id + "," + type + "," + name + "," + status + "," + description + ",";
+        return id + "," + type + "," + name + "," + status + "," + description + "," + duration + "," +
+                startTime.toString();
     }
 }
 

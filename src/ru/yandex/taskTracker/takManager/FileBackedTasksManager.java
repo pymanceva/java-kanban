@@ -12,7 +12,8 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
+import java.time.LocalDateTime;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -71,6 +72,21 @@ public class FileBackedTasksManager extends InMemoryTaskManager implements TaskM
     public void addSubtask(Subtask subtask) {
         super.addSubtask(subtask);
         save();
+    }
+
+    @Override
+    public void addTaskExisted(Task task, int idExisted) {
+        super.addTaskExisted(task, idExisted);
+    }
+
+    @Override
+    public void addEpicExisted(Epic epic, int idExisted) {
+        super.addEpicExisted(epic, idExisted);
+    }
+
+    @Override
+    public void addSubtaskExisted(Subtask subtask, int idExisted) {
+        super.addSubtaskExisted(subtask, idExisted);
     }
 
     @Override
@@ -186,7 +202,8 @@ public class FileBackedTasksManager extends InMemoryTaskManager implements TaskM
     }
 
     private static List<Integer> historyFromString(String value, FileBackedTasksManager manager) {
-        List<Integer> history = new ArrayList<>();
+        List<Integer> history = new LinkedList<>();
+        manager.inMemoryHistoryManager.clearHistory();
         String[] parts = value.split(",");
 
         for (String part : parts) {
@@ -208,26 +225,47 @@ public class FileBackedTasksManager extends InMemoryTaskManager implements TaskM
     }
 
     private static Task fromString(String value, FileBackedTasksManager manager) {
-        String[] parts = value.split(","); //id, type, name, status, description, epic
+        String[] parts = value.split(","); //id, type, name, status, description, duration, startTime, epic
         int id = Integer.parseInt(parts[0]);
         TaskType type = TaskType.valueOf(parts[1]);
 
         switch (type) {
             case TASK:
-                Task task = new Task(parts[2], parts[4], Status.valueOf(parts[3]), TaskType.valueOf(parts[1]));
-                manager.addTask(task);
+                Task task = new Task(
+                        parts[2],
+                        parts[4],
+                        Status.valueOf(parts[3]),
+                        TaskType.valueOf(parts[1]),
+                        Integer.parseInt(parts[5]),
+                        LocalDateTime.parse(parts[6])
+                );
                 task.setId(id);
+                manager.addTaskExisted(task, id);
                 return task;
             case EPIC:
-                Epic epic = new Epic(parts[2], parts[4], Status.valueOf(parts[3]), TaskType.valueOf(parts[1]));
-                manager.addEpic(epic);
+                Epic epic = new Epic(
+                        parts[2],
+                        parts[4],
+                        Status.valueOf(parts[3]),
+                        TaskType.valueOf(parts[1]),
+                        Integer.parseInt(parts[5]),
+                        LocalDateTime.parse(parts[6])
+                );
                 epic.setId(id);
+                manager.addEpicExisted(epic, id);
                 return epic;
             case SUBTASK:
-                Subtask subtask = new Subtask(parts[2], parts[4], Status.valueOf(parts[3]), Integer.parseInt(parts[5]),
-                        TaskType.valueOf(parts[1]));
-                manager.addSubtask(subtask);
+                Subtask subtask = new Subtask(
+                        parts[2],
+                        parts[4],
+                        Status.valueOf(parts[3]),
+                        Integer.parseInt(parts[5]),
+                        TaskType.valueOf(parts[1]),
+                        Integer.parseInt(parts[5]),
+                        LocalDateTime.parse(parts[6])
+                );
                 subtask.setId(id);
+                manager.addSubtaskExisted(subtask, id);
                 return subtask;
             default:
                 return null;

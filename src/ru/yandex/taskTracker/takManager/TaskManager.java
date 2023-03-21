@@ -10,6 +10,10 @@ import java.util.Map;
 
 public interface TaskManager {
     void addTask(Task task);
+    void addTaskExisted(Task task, int idExisted);
+
+    void addEpicExisted(Epic epic, int idExisted);
+    void addSubtaskExisted(Subtask subtask, int idExisted);
     void addEpic(Epic epic);
     void addSubtask(Subtask subtask);
     List<Integer> getListOfSubtasksOfEpic(int id);
@@ -22,6 +26,7 @@ public interface TaskManager {
     void changeStatusOfTask(Task task, Status status);
     void changeStatusOfSubtask(Subtask subtask, Status status);
     void checkStatusOfEpic(Epic epic);
+    void checkTimeOfEpic(Epic epic);
     Task getTaskByID(int id);
     Epic getEpicByID(int id);
     Subtask getSubtaskByID(int id);

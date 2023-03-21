@@ -7,7 +7,7 @@ import java.util.*;
 
 public class InMemoryHistoryManager implements HistoryManager {
     private static final CustomLinkedList<Task> history = new CustomLinkedList<>();
-    private static final Map<Integer, Node<Task>> historyMap = new HashMap<>();
+    private static final Map<Integer, Node<Task>> historyMap = new LinkedHashMap<>();
 
     @Override
     public void addTask(Task task) {
@@ -16,12 +16,18 @@ public class InMemoryHistoryManager implements HistoryManager {
                 Node<Task> newNode = historyMap.get(task.getId());
                 history.removeNode(newNode);
                 history.linkLast(task);
+                historyMap.remove(task.getId());
                 historyMap.put(task.getId(), newNode);
             } else {
                 Node<Task> newNode = history.linkLast(task);
                 historyMap.put(task.getId(), newNode);
             }
         }
+    }
+
+    public void clearHistory() {
+        historyMap.clear();
+
     }
 
     @Override
