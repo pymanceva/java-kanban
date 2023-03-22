@@ -7,15 +7,25 @@ import ru.yandex.taskTracker.util.Status;
 
 import java.util.List;
 import java.util.Map;
+import java.util.TreeSet;
 
 public interface TaskManager {
+    void addPrioritizedTask(Task task);
+    TreeSet<Task> getPrioritizedTasks();
+
+    boolean validateTask(Task task);
+
     void addTask(Task task);
     void addTaskExisted(Task task, int idExisted);
-
     void addEpicExisted(Epic epic, int idExisted);
     void addSubtaskExisted(Subtask subtask, int idExisted);
     void addEpic(Epic epic);
     void addSubtask(Subtask subtask);
+
+    void updateEpicBySubtask(Subtask subtask);
+
+    void prioritizeAllTasks();
+
     List<Integer> getListOfSubtasksOfEpic(int id);
     void deleteAllTasks();
     void deleteAllSubtasks();
@@ -36,4 +46,5 @@ public interface TaskManager {
     Map<Integer, Task> getTasks();
     Map<Integer, Epic> getEpics();
     Map<Integer, Subtask> getSubtasks();
+
 }

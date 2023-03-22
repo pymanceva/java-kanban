@@ -247,9 +247,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager implements TaskM
                         parts[2],
                         parts[4],
                         Status.valueOf(parts[3]),
-                        TaskType.valueOf(parts[1]),
-                        Integer.parseInt(parts[5]),
-                        LocalDateTime.parse(parts[6])
+                        TaskType.valueOf(parts[1])
                 );
                 epic.setId(id);
                 manager.addEpicExisted(epic, id);
@@ -259,7 +257,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager implements TaskM
                         parts[2],
                         parts[4],
                         Status.valueOf(parts[3]),
-                        Integer.parseInt(parts[5]),
+                        Integer.parseInt(parts[7]),
                         TaskType.valueOf(parts[1]),
                         Integer.parseInt(parts[5]),
                         LocalDateTime.parse(parts[6])
@@ -281,6 +279,10 @@ public class FileBackedTasksManager extends InMemoryTaskManager implements TaskM
                 String line = lines[i];
                 fromString(line, loadedManager);
             }
+            for (Subtask subtask : loadedManager.getSubtasks().values()) {
+                loadedManager.updateEpicBySubtask(subtask);
+            }
+            loadedManager.prioritizeAllTasks();
             List<Integer> history = historyFromString(lines[lines.length-1], loadedManager);
 
             return loadedManager;

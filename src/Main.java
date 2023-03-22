@@ -17,16 +17,25 @@ public class Main {
     static void testCode() {
         System.out.println("Поехали!");
         FileBackedTasksManager manager = new FileBackedTasksManager(Path.of(FileBackedTasksManager.PATH).toFile());
-        Task task1 = new Task("task 1", "лалала 1", NEW, TASK, 3, LocalDateTime.of(2023,3,22,12,22));
-        Task task2 = new Task("task 2", "lalala2", NEW, TASK, 3, LocalDateTime.of(2023,3,21,12,22));
-        Epic epic1 = new Epic("epic 3", "jjj", NEW, EPIC, 3, LocalDateTime.of(2023,3,22,12,12));
-        Subtask subtask1 = new Subtask("subtask 4", "uuu 4", NEW, 3, SUBTASK, 3,
-                LocalDateTime.of(2023,3,22,2,22));
-        Subtask subtask2 = new Subtask("subtask 5", "hhh 5", NEW, 3, SUBTASK, 3,
-                LocalDateTime.of(2023,3,12,12,22));
-        Epic epic2 = new Epic("Epic 6", "iii 6", NEW, EPIC,3, LocalDateTime.of(2023,3,22,12,44));
-        Subtask subtask3 = new Subtask("Subtask 7", "lll 7", NEW, 6, SUBTASK, 3,
-                LocalDateTime.of(2023,2,22,12,22));
+        Task task1 = new Task("task 1", "описание 1", NEW, TASK, 15,
+                LocalDateTime.of(2023,3,22,8,0));
+
+        Task task2 = new Task("task 2", "описание 2", NEW, TASK, 15,
+                LocalDateTime.of(2023,3,22,1,0));
+
+        Epic epic1 = new Epic("epic 3", "описание 3", NEW, EPIC);
+
+        Subtask subtask1 = new Subtask("subtask 4", "описание 4", NEW, 3, SUBTASK, 15,
+                LocalDateTime.of(2023,3,22,7,0));
+
+        Subtask subtask2 = new Subtask("subtask 5", "описание 5", NEW, 3, SUBTASK, 15,
+                LocalDateTime.of(2023,3,22,2,0));
+
+        Epic epic2 = new Epic("Epic 6", "описание 6", NEW, EPIC);
+
+        Subtask subtask3 = new Subtask("Subtask 7", "описание 7", NEW, 6, SUBTASK, 15,
+                LocalDateTime.of(2023,3,22,11,0));
+
         manager.addTask(task1);
         manager.addTask(task2);
         manager.addEpic(epic1);
@@ -51,6 +60,7 @@ public class Main {
         System.out.println(manager1.getSubtasks());
         System.out.println(manager.inMemoryHistoryManager);
         System.out.println(manager1.inMemoryHistoryManager);
+        System.out.println(manager1.getPrioritizedTasks());
 
 
     }

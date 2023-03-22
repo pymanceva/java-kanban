@@ -95,7 +95,7 @@ public class Task {
     @Override
     public String toString() {
         return id + "," + type + "," + name + "," + status + "," + description + "," + duration + "," +
-                startTime.toString();
+                startTime;
     }
 }
 
