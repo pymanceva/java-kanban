@@ -15,10 +15,10 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 class InMemoryHistoryManagerTest {
-    InMemoryTaskManager taskManager;
-    Task task1;
-    Epic epic2;
-    Subtask subtask3;
+    private InMemoryTaskManager taskManager;
+    private Task task1;
+    private Epic epic2;
+    private Subtask subtask3;
 
     @BeforeEach
     void setHistoryManager() {
