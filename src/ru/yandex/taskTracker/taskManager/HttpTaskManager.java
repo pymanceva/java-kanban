@@ -7,15 +7,14 @@ import ru.yandex.taskTracker.model.Task;
 import ru.yandex.taskTracker.server.KVTaskClient;
 import ru.yandex.taskTracker.util.LocalDateTimeAdapter;
 
-import java.io.IOException;
 import java.time.LocalDateTime;
 
 public class HttpTaskManager extends FileBackedTasksManager implements TaskManager {
     private final KVTaskClient client;
-    private final String KEY_TASKS = "tasks";
-    private final String KEY_EPICS = "epics";
-    private final String KEY_SUBTASKS = "subtasks";
-    private final String KEY_HISTORY = "history";
+    private static final String KEY_TASKS = "tasks";
+    private static final String KEY_EPICS = "epics";
+    private static final String KEY_SUBTASKS = "subtasks";
+    private static final String KEY_HISTORY = "history";
     private final Gson gson;
 
     public HttpTaskManager(String url) {
@@ -26,30 +25,46 @@ public class HttpTaskManager extends FileBackedTasksManager implements TaskManag
         gson = gsonBuilder.create();
     }
 
-    public static HttpTaskManager loadFromServer() throws IOException, InterruptedException {
+    public static HttpTaskManager loadFromServer() {
         HttpTaskManager loadedManager = new HttpTaskManager("http://localhost:8078/");
-        JsonElement allTasksJson = JsonParser.parseString(loadedManager.client.load(loadedManager.KEY_TASKS));
+
+        loadTasksFromServer(loadedManager);
+        loadSubtasksFromServer(loadedManager);
+        loadEpicsFromServer(loadedManager);
+        loadHistoryFromServer(loadedManager);
+
+        return loadedManager;
+    }
+
+    private static void loadTasksFromServer(HttpTaskManager loadedManager) {
+        JsonElement allTasksJson = JsonParser.parseString(loadedManager.client.load(KEY_TASKS));
         JsonArray allTasksJsonArray = allTasksJson.getAsJsonArray();
         for (JsonElement element : allTasksJsonArray) {
             Task task = loadedManager.gson.fromJson(element, Task.class);
             loadedManager.addTaskExisted(task);
         }
+    }
 
-        JsonElement allSubtasksJson = JsonParser.parseString(loadedManager.client.load(loadedManager.KEY_SUBTASKS));
+    private static void loadSubtasksFromServer(HttpTaskManager loadedManager) {
+        JsonElement allSubtasksJson = JsonParser.parseString(loadedManager.client.load(KEY_SUBTASKS));
         JsonArray allSubtasksJsonArray = allSubtasksJson.getAsJsonArray();
         for (JsonElement element : allSubtasksJsonArray) {
             Subtask subtask = loadedManager.gson.fromJson(element, Subtask.class);
             loadedManager.addSubtaskExisted(subtask);
         }
+    }
 
-        JsonElement allEpicsJson = JsonParser.parseString(loadedManager.client.load(loadedManager.KEY_EPICS));
+    private static void loadEpicsFromServer(HttpTaskManager loadedManager) {
+        JsonElement allEpicsJson = JsonParser.parseString(loadedManager.client.load(KEY_EPICS));
         JsonArray allEpicsJsonArray = allEpicsJson.getAsJsonArray();
         for (JsonElement element : allEpicsJsonArray) {
             Epic epic = loadedManager.gson.fromJson(element, Epic.class);
             loadedManager.addEpicExisted(epic);
         }
+    }
 
-        JsonElement historyJson = JsonParser.parseString(loadedManager.client.load(loadedManager.KEY_HISTORY));
+    private static void loadHistoryFromServer(HttpTaskManager loadedManager) {
+        JsonElement historyJson = JsonParser.parseString(loadedManager.client.load(KEY_HISTORY));
         String history = historyJson.toString();
         history = history.replaceAll("\"", "");
         String[] parts = history.split(",");
@@ -63,7 +78,6 @@ public class HttpTaskManager extends FileBackedTasksManager implements TaskManag
                 loadedManager.getEpicByID(id);
             }
         }
-        return loadedManager;
     }
 
     @Override

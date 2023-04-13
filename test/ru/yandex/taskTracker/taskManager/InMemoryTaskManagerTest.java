@@ -2,11 +2,11 @@ package ru.yandex.taskTracker.taskManager;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import ru.yandex.taskTracker.Exceptions.IncorrectIDException;
 import ru.yandex.taskTracker.model.Epic;
 import ru.yandex.taskTracker.model.Subtask;
 import ru.yandex.taskTracker.model.Task;
 import ru.yandex.taskTracker.util.Status;
-import ru.yandex.taskTracker.util.TaskManagerException;
 import ru.yandex.taskTracker.util.TaskType;
 
 import java.time.LocalDateTime;
@@ -166,7 +166,7 @@ public class InMemoryTaskManagerTest extends TaskManagerTest<InMemoryTaskManager
 
     @Test
     void shouldThrowExceptionWhenID5() {
-        TaskManagerException e = assertThrows(TaskManagerException.class, () ->
+        IncorrectIDException e = assertThrows(IncorrectIDException.class, () ->
                 taskManager.getListOfSubtasksOfEpic(5));
         assertEquals("Неверный ID", e.getMessage());
     }
@@ -192,8 +192,8 @@ public class InMemoryTaskManagerTest extends TaskManagerTest<InMemoryTaskManager
 
     @Test
     void shouldThrowExceptionWhenEpicNull() {
-        TaskManagerException e = assertThrows(TaskManagerException.class, () ->
+        IncorrectIDException e = assertThrows(IncorrectIDException.class, () ->
                 taskManager.updateEpicBySubtask(subtask3));
-        assertEquals("Эпик с заданным ID не был добавлен", e.getMessage());
+        assertEquals("Неверный ID", e.getMessage());
     }
 }

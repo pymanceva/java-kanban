@@ -1,11 +1,12 @@
 package ru.yandex.taskTracker.taskManager;
 
 import org.junit.jupiter.api.Test;
+import ru.yandex.taskTracker.Exceptions.IncorrectIDException;
+import ru.yandex.taskTracker.Exceptions.TaskValidationException;
 import ru.yandex.taskTracker.model.Epic;
 import ru.yandex.taskTracker.model.Subtask;
 import ru.yandex.taskTracker.model.Task;
 import ru.yandex.taskTracker.util.Status;
-import ru.yandex.taskTracker.util.TaskManagerException;
 import ru.yandex.taskTracker.util.TaskType;
 
 import java.time.LocalDateTime;
@@ -49,8 +50,8 @@ public abstract class TaskManagerTest<T extends TaskManager> {
         taskManager.addTask(task1);
         Task invalidTask = new Task("1", "1", Status.NEW, TaskType.TASK,
                 5, LocalDateTime.of(2023, 1, 1, 0, 0));
-        TaskManagerException e = assertThrows(TaskManagerException.class, () -> taskManager.addTask(invalidTask));
-        assertEquals("Нельзя выполнять более 1 задачи за раз", e.getMessage());
+        TaskValidationException e = assertThrows(TaskValidationException.class, () -> taskManager.addTask(invalidTask));
+        assertEquals("Нельзя выполнять более 1 задачи одновременно", e.getMessage());
     }
 
     @Test
@@ -80,14 +81,14 @@ public abstract class TaskManagerTest<T extends TaskManager> {
         taskManager.addSubtask(subtask3);
         Subtask invalidSubtask = new Subtask("1", "1", Status.NEW, 2, TaskType.SUBTASK,
                 5, LocalDateTime.of(2023, 1, 1, 0, 5));
-        TaskManagerException e = assertThrows(TaskManagerException.class, () -> taskManager.addSubtask(invalidSubtask));
-        assertEquals("Нельзя выполнять более 1 задачи за раз", e.getMessage());
+        TaskValidationException e = assertThrows(TaskValidationException.class, () -> taskManager.addSubtask(invalidSubtask));
+        assertEquals("Нельзя выполнять более 1 задачи одновременно", e.getMessage());
     }
 
     @Test
     void shouldThrowExceptionWhenNoEpicOfSubtask() {
-        TaskManagerException e = assertThrows(TaskManagerException.class, () -> taskManager.addSubtask(subtask3));
-        assertEquals("Эпик, которому принадлежит эта задача, не найден", e.getMessage());
+        IncorrectIDException e = assertThrows(IncorrectIDException.class, () -> taskManager.addSubtask(subtask3));
+        assertEquals("Неверный ID", e.getMessage());
     }
 
 
@@ -124,7 +125,7 @@ public abstract class TaskManagerTest<T extends TaskManager> {
     @Test
     void shouldThrowTaskManagerExceptionWhenTaskID2() {
         taskManager.addTask(task1);
-        final TaskManagerException e = assertThrows(TaskManagerException.class, () -> taskManager.getTaskByID(2));
+        final IncorrectIDException e = assertThrows(IncorrectIDException.class, () -> taskManager.getTaskByID(2));
         assertEquals("Неверный ID", e.getMessage());
     }
 
@@ -143,7 +144,7 @@ public abstract class TaskManagerTest<T extends TaskManager> {
     void shouldThrowTaskManagerExceptionWhenSubtaskAndID3() {
         taskManager.addEpic(epic2);
         taskManager.addSubtask(subtask3);
-        final TaskManagerException e = assertThrows(TaskManagerException.class, () -> taskManager.getSubtaskByID(3));
+        final IncorrectIDException e = assertThrows(IncorrectIDException.class, () -> taskManager.getSubtaskByID(3));
         assertEquals("Неверный ID", e.getMessage());
     }
 
@@ -160,7 +161,7 @@ public abstract class TaskManagerTest<T extends TaskManager> {
     @Test
     void shouldThrowTaskManagerExceptionWhenEpicAndID2() {
         taskManager.addEpic(epic2);
-        final TaskManagerException e = assertThrows(TaskManagerException.class, () -> taskManager.getEpicByID(2));
+        final IncorrectIDException e = assertThrows(IncorrectIDException.class, () -> taskManager.getEpicByID(2));
         assertEquals("Неверный ID", e.getMessage());
     }
 
@@ -349,8 +350,8 @@ public abstract class TaskManagerTest<T extends TaskManager> {
 
     @Test
     void shouldThrowTaskManagerExceptionWhenID2() {
-        TaskManagerException e = assertThrows(TaskManagerException.class, () -> taskManager.deleteTaskByID(2));
-        assertEquals("Задача с таким ID не существует", e.getMessage());
+        IncorrectIDException e = assertThrows(IncorrectIDException.class, () -> taskManager.deleteTaskByID(2));
+        assertEquals("Неверный ID", e.getMessage());
     }
 
     @Test
@@ -364,8 +365,8 @@ public abstract class TaskManagerTest<T extends TaskManager> {
 
     @Test
     void shouldThrowTaskManagerExceptionWhenDeleteEpicWithID2() {
-        TaskManagerException e = assertThrows(TaskManagerException.class, () -> taskManager.deleteEpicByID(2));
-        assertEquals("Эпик с таким ID не существует", e.getMessage());
+        IncorrectIDException e = assertThrows(IncorrectIDException.class, () -> taskManager.deleteEpicByID(2));
+        assertEquals("Неверный ID", e.getMessage());
     }
 
     @Test
@@ -382,8 +383,8 @@ public abstract class TaskManagerTest<T extends TaskManager> {
 
     @Test
     void shouldThrowTaskManagerExceptionWhenDeleteSubtaskWithID2() {
-        TaskManagerException e = assertThrows(TaskManagerException.class, () -> taskManager.deleteSubtaskByID(2));
-        assertEquals("Подзадачи с таким ID не существует", e.getMessage());
+        IncorrectIDException e = assertThrows(IncorrectIDException.class, () -> taskManager.deleteSubtaskByID(2));
+        assertEquals("Неверный ID", e.getMessage());
     }
 
     @Test

@@ -1,11 +1,12 @@
 package ru.yandex.taskTracker.taskManager;
 
+import ru.yandex.taskTracker.Exceptions.IncorrectIDException;
+import ru.yandex.taskTracker.Exceptions.TaskValidationException;
 import ru.yandex.taskTracker.historyManager.InMemoryHistoryManager;
 import ru.yandex.taskTracker.model.Epic;
 import ru.yandex.taskTracker.model.Subtask;
 import ru.yandex.taskTracker.model.Task;
 import ru.yandex.taskTracker.util.Status;
-import ru.yandex.taskTracker.util.TaskManagerException;
 
 import java.time.LocalDateTime;
 import java.util.*;
@@ -91,7 +92,7 @@ public class InMemoryTaskManager implements TaskManager {
                 tasks.put(id, task);
                 addPrioritizedTask(task);
             } else {
-                throw new TaskManagerException("Нельзя выполнять более 1 задачи за раз");
+                throw new TaskValidationException();
             }
         }
     }
@@ -116,10 +117,10 @@ public class InMemoryTaskManager implements TaskManager {
                     addPrioritizedTask(subtask);
                     updateEpicBySubtask(subtask);
                 } else {
-                    throw new TaskManagerException("Эпик, которому принадлежит эта задача, не найден");
+                    throw new IncorrectIDException();
                 }
             } else {
-                throw new TaskManagerException("Нельзя выполнять более 1 задачи за раз");
+                throw new TaskValidationException();
             }
         }
     }
@@ -143,7 +144,7 @@ public class InMemoryTaskManager implements TaskManager {
                 checkStatusOfEpic(epic);
                 checkTimeOfEpic(epic);
             } catch (NullPointerException e) {
-                throw new TaskManagerException("Эпик с заданным ID не был добавлен");
+                throw new IncorrectIDException();
             }
         }
     }
@@ -153,7 +154,7 @@ public class InMemoryTaskManager implements TaskManager {
         try {
             return epics.get(id).getSubtasksOfEpic();
         } catch (NullPointerException e) {
-            throw new TaskManagerException("Неверный ID");
+            throw new IncorrectIDException();
         }
     }
 
@@ -312,7 +313,7 @@ public class InMemoryTaskManager implements TaskManager {
     public Task getTaskByID(int id) {
         Task task = tasks.get(id);
         if (task == null) {
-            throw new TaskManagerException("Неверный ID");
+            throw new IncorrectIDException();
         } else {
             inMemoryHistoryManager.addTask(task);
         }
@@ -323,7 +324,7 @@ public class InMemoryTaskManager implements TaskManager {
     public Epic getEpicByID(int id) {
         Epic epic = epics.get(id);
         if (epic == null) {
-            throw new TaskManagerException("Неверный ID");
+            throw new IncorrectIDException();
         } else {
             inMemoryHistoryManager.addTask(epic);
         }
@@ -334,7 +335,7 @@ public class InMemoryTaskManager implements TaskManager {
     public Subtask getSubtaskByID(int id) {
         Subtask subtask = subtasks.get(id);
         if (subtask == null) {
-            throw new TaskManagerException("Неверный ID");
+            throw new IncorrectIDException();
         } else {
             inMemoryHistoryManager.addTask(subtask);
         }
@@ -348,7 +349,7 @@ public class InMemoryTaskManager implements TaskManager {
             prioritizedTasks.remove(tasks.get(id));
             tasks.remove(id);
         } else {
-            throw new TaskManagerException("Задача с таким ID не существует");
+            throw new IncorrectIDException();
         }
     }
 
@@ -365,7 +366,7 @@ public class InMemoryTaskManager implements TaskManager {
             prioritizedTasks.remove(epics.get(id));
             epics.remove(id);
         } else {
-            throw new TaskManagerException("Эпик с таким ID не существует");
+            throw new IncorrectIDException();
         }
     }
 
@@ -382,7 +383,7 @@ public class InMemoryTaskManager implements TaskManager {
             checkStatusOfEpic(epics.get(subtask.getIdOfEpic()));
             checkTimeOfEpic(epics.get(subtask.getIdOfEpic()));
         } else {
-            throw new TaskManagerException("Подзадачи с таким ID не существует");
+            throw new IncorrectIDException();
         }
     }
 

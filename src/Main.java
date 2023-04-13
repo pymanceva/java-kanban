@@ -7,18 +7,17 @@ import ru.yandex.taskTracker.taskManager.HttpTaskManager;
 import ru.yandex.taskTracker.taskManager.Managers;
 import ru.yandex.taskTracker.taskManager.TaskManager;
 
-import java.io.IOException;
 import java.time.LocalDateTime;
 
 import static ru.yandex.taskTracker.util.Status.NEW;
 import static ru.yandex.taskTracker.util.TaskType.*;
 
 public class Main {
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
         testCode();
     }
 
-    static void testCode() throws IOException {
+    static void testCode() {
         System.out.println("Поехали!");
 
         HttpTaskServer server = new HttpTaskServer();
@@ -26,16 +25,9 @@ public class Main {
 
 
         KVServer kvServer;
-        TaskManager manager = null;
-        try {
-            kvServer = new KVServer();
-            kvServer.start();
-            manager = Managers.getDefault();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
+        kvServer = new KVServer();
+        kvServer.start();
+        TaskManager manager = Managers.getDefault();
 
         Task task1 = new Task("task 1", "описание 1", NEW, TASK, 15,
                 LocalDateTime.of(2023, 3, 22, 8, 0));
@@ -60,12 +52,8 @@ public class Main {
         manager.getSubtaskByID(3);
         manager.getEpicByID(2);
 
-        HttpTaskManager manager1 = null;
-        try {
-            manager1 = HttpTaskManager.loadFromServer();
-        } catch (IOException | InterruptedException e) {
-            e.printStackTrace();
-        }
+        HttpTaskManager manager1 = HttpTaskManager.loadFromServer();
+
 
         System.out.println(manager.getTasks());
         System.out.println(manager1.getTasks());

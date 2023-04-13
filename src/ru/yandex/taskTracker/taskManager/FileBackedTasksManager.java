@@ -1,11 +1,13 @@
 package ru.yandex.taskTracker.taskManager;
 
+import ru.yandex.taskTracker.Exceptions.CreateFileException;
+import ru.yandex.taskTracker.Exceptions.FailedReadingFileException;
+import ru.yandex.taskTracker.Exceptions.FailedWritingFileException;
 import ru.yandex.taskTracker.historyManager.HistoryManager;
 import ru.yandex.taskTracker.model.Epic;
 import ru.yandex.taskTracker.model.Subtask;
 import ru.yandex.taskTracker.model.Task;
 import ru.yandex.taskTracker.util.Status;
-import ru.yandex.taskTracker.util.TaskManagerException;
 import ru.yandex.taskTracker.util.TaskType;
 
 import java.io.File;
@@ -126,7 +128,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager implements TaskM
             return loadedManager;
 
         } catch (IOException e) {
-            throw new TaskManagerException("Произошла ошибка при чтении данных из файла");
+            throw new FailedReadingFileException(e);
         }
     }
 
@@ -140,7 +142,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager implements TaskM
             try {
                 Files.createFile(Path.of(path));
             } catch (IOException e) {
-                throw new TaskManagerException("Не удалось создать файл");
+                throw new CreateFileException(e);
             }
         }
     }
@@ -161,7 +163,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager implements TaskM
 
             writer.println("\r\n" + historyToString(super.inMemoryHistoryManager));
         } catch (IOException e) {
-            throw new TaskManagerException("Произошла ошибка при записи данных в файл");
+            throw new FailedWritingFileException(e);
         }
     }
 

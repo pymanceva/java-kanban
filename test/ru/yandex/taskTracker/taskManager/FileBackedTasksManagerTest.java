@@ -2,11 +2,11 @@ package ru.yandex.taskTracker.taskManager;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import ru.yandex.taskTracker.Exceptions.FailedReadingFileException;
 import ru.yandex.taskTracker.model.Epic;
 import ru.yandex.taskTracker.model.Subtask;
 import ru.yandex.taskTracker.model.Task;
 import ru.yandex.taskTracker.util.Status;
-import ru.yandex.taskTracker.util.TaskManagerException;
 import ru.yandex.taskTracker.util.TaskType;
 
 import java.io.File;
@@ -20,7 +20,7 @@ import java.util.TreeSet;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class FileBackedTasksManagerTest extends TaskManagerTest<FileBackedTasksManager> {
-    public static final String PATH = "src\\resources\\kanbanTest.csv";
+    private static final String PATH = "src\\resources\\kanbanTest.csv";
 
     @BeforeEach
     @Override
@@ -146,9 +146,9 @@ public class FileBackedTasksManagerTest extends TaskManagerTest<FileBackedTasksM
     }
 
     @Test
-    void shouldThrowTaskManagerExceptionWhenWrongFile() {
-        TaskManagerException e = assertThrows(TaskManagerException.class, () ->
+    void shouldThrowFailedReadingFileExceptionWhenWrongFile() {
+        FailedReadingFileException e = assertThrows(FailedReadingFileException.class, () ->
                 FileBackedTasksManager.loadFromFile(new File("dc")));
-        assertEquals("Произошла ошибка при чтении данных из файла", e.getMessage());
+        assertEquals("Не удалось прочитать файл", e.getMessage());
     }
 }

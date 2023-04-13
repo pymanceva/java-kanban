@@ -1,6 +1,8 @@
 package ru.yandex.taskTracker.server;
 
-import ru.yandex.taskTracker.util.TaskManagerException;
+import ru.yandex.taskTracker.Exceptions.FailedLoadFromServerException;
+import ru.yandex.taskTracker.Exceptions.FailedRegistrationException;
+import ru.yandex.taskTracker.Exceptions.FailedSaveOnServerException;
 
 import java.io.IOException;
 import java.net.URI;
@@ -10,8 +12,10 @@ import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 
 public class KVTaskClient {
-    public final String SERVER_URL = "http://localhost:8078/";
-    private final String API_TOKEN;
+    private static final String SERVER_URL = "http://localhost:8078/";
+    private final String API_TOKEN; //не понимаю, как может быть константой,
+    // модификатор static не подходит -
+    // токен уникален для каждого клиента, то есть для каждого объекта класса
 
 
     public KVTaskClient(String url) {
@@ -33,7 +37,7 @@ public class KVTaskClient {
                     client.send(request, HttpResponse.BodyHandlers.ofString(StandardCharsets.UTF_8));
             API_TOKEN = response.body();
         } catch (IOException | InterruptedException exception) {
-            throw new TaskManagerException("Не удалось загрузить данные");
+            throw new FailedRegistrationException(exception);
         }
     }
 
@@ -55,7 +59,7 @@ public class KVTaskClient {
             HttpResponse<String> response =
                     client.send(request, HttpResponse.BodyHandlers.ofString(StandardCharsets.UTF_8));
         } catch (IOException | InterruptedException exception) {
-            throw new TaskManagerException("Не удалось загрузить данные");
+            throw new FailedSaveOnServerException(exception);
         }
     }
 
@@ -80,10 +84,8 @@ public class KVTaskClient {
                     client.send(request, HttpResponse.BodyHandlers.ofString(StandardCharsets.UTF_8));
             body = response.body();
         } catch (IOException | InterruptedException exception) {
-            throw new TaskManagerException("Не удалось загрузить данные");
+            throw new FailedLoadFromServerException(exception);
         }
         return body;
     }
-
-
 }

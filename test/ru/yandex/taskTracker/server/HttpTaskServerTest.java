@@ -38,7 +38,7 @@ public class HttpTaskServerTest {
     private FileBackedTasksManager manager;
 
     @BeforeEach
-    void startServer() throws IOException {
+    void startServer() {
         server = new HttpTaskServer();
         server.start();
         task1 = new Task("TestTaskName", "TestTaskDescription", Status.NEW, TaskType.TASK,
