@@ -1,4 +1,4 @@
-package ru.yandex.taskTracker.takManager;
+package ru.yandex.taskTracker.taskManager;
 
 import ru.yandex.taskTracker.historyManager.InMemoryHistoryManager;
 import ru.yandex.taskTracker.model.Epic;
@@ -162,6 +162,7 @@ public class InMemoryTaskManager implements TaskManager {
         if (!tasks.isEmpty()) {
             for (Integer id : tasks.keySet()) {
                 inMemoryHistoryManager.removeTask(id);
+                prioritizedTasks.remove(tasks.get(id));
             }
             tasks.clear();
         }
@@ -172,6 +173,7 @@ public class InMemoryTaskManager implements TaskManager {
         if (!epics.isEmpty()) {
             for (Integer id : epics.keySet()) {
                 inMemoryHistoryManager.removeTask(id);
+                prioritizedTasks.remove(epics.get(id));
             }
             epics.clear();
             deleteAllSubtasks();
@@ -183,6 +185,7 @@ public class InMemoryTaskManager implements TaskManager {
         if (!subtasks.isEmpty()) {
             for (Integer id : subtasks.keySet()) {
                 inMemoryHistoryManager.removeTask(id);
+                prioritizedTasks.remove(subtasks.get(id));
                 for (Epic epic : epics.values()) {
                     if (epic.getSubtasksOfEpic().contains(id)) {
                         List<Integer> subtasksOfEpic = getListOfSubtasksOfEpic(epic.getId());
@@ -342,6 +345,7 @@ public class InMemoryTaskManager implements TaskManager {
     public void deleteTaskByID(int id) {
         if (tasks.containsKey(id)) {
             inMemoryHistoryManager.removeTask(id);
+            prioritizedTasks.remove(tasks.get(id));
             tasks.remove(id);
         } else {
             throw new TaskManagerException("Задача с таким ID не существует");
@@ -354,9 +358,11 @@ public class InMemoryTaskManager implements TaskManager {
             List<Integer> subtasksOfEpic = epics.get(id).getSubtasksOfEpic();
             for (Integer idSubtask : subtasksOfEpic) {
                 inMemoryHistoryManager.removeTask(idSubtask);
+                prioritizedTasks.remove(subtasks.get(idSubtask));
                 subtasks.remove(idSubtask);
             }
             inMemoryHistoryManager.removeTask(id);
+            prioritizedTasks.remove(epics.get(id));
             epics.remove(id);
         } else {
             throw new TaskManagerException("Эпик с таким ID не существует");
@@ -368,6 +374,7 @@ public class InMemoryTaskManager implements TaskManager {
         if (subtasks.containsKey(id)) {
             Subtask subtask = subtasks.get(id);
             inMemoryHistoryManager.removeTask(id);
+            prioritizedTasks.remove(subtask);
             subtasks.remove(id);
             List<Integer> subtasksOfEpic = getListOfSubtasksOfEpic(subtask.getIdOfEpic());
             subtasksOfEpic.removeIf(idOfSubtask -> id == idOfSubtask);

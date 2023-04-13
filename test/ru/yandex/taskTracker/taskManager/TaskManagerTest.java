@@ -1,4 +1,4 @@
-package ru.yandex.taskTracker.takManager;
+package ru.yandex.taskTracker.taskManager;
 
 import org.junit.jupiter.api.Test;
 import ru.yandex.taskTracker.model.Epic;

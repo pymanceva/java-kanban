@@ -1,4 +1,4 @@
-package ru.yandex.taskTracker.takManager;
+package ru.yandex.taskTracker.taskManager;
 
 import ru.yandex.taskTracker.model.Epic;
 import ru.yandex.taskTracker.model.Subtask;

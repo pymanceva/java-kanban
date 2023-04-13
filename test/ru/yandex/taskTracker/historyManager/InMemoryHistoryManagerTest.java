@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 import ru.yandex.taskTracker.model.Epic;
 import ru.yandex.taskTracker.model.Subtask;
 import ru.yandex.taskTracker.model.Task;
-import ru.yandex.taskTracker.takManager.InMemoryTaskManager;
+import ru.yandex.taskTracker.taskManager.InMemoryTaskManager;
 import ru.yandex.taskTracker.util.Status;
 import ru.yandex.taskTracker.util.TaskType;
 

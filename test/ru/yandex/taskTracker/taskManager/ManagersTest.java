@@ -1,4 +1,4 @@
-package ru.yandex.taskTracker.takManager;
+package ru.yandex.taskTracker.taskManager;
 
 import org.junit.jupiter.api.Test;
 
@@ -9,12 +9,6 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class ManagersTest {
 
-    @Test
-    void shouldReturnInMemoryTaskManager() {
-        TaskManager manager = Managers.getDefault();
-        assertNotNull(manager, "Менеджер не был создан");
-        assertEquals(manager.getClass(), InMemoryTaskManager.class, "Неверно создан менеджер");
-    }
 
     @Test
     void getFileBackedTaskManager() {

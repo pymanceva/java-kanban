@@ -1,4 +1,4 @@
-package ru.yandex.taskTracker.takManager;
+package ru.yandex.taskTracker.taskManager;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
